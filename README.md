@@ -335,3 +335,13 @@ resolve: {
 
 `git push origin main`
 
+
+
+## Thanks
+
+- [Supabase](https://supabase.com/)
+- [AWS Amplify](https://aws.amazon.com/amplify/)
+- [Vite](https://vitejs.dev/)
+- [React](https://reactjs.org/)
+- [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+- [Next Steps Vite+Amplify](https://www.nextsteps.dev/posts/aws-amplify-getting-started-with-vite)
