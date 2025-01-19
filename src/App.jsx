@@ -1,33 +1,54 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from 'react'
+import { supabase } from './supabaseClient'
 
 function App() {
   const [count, setCount] = useState(0)
 
+  // Load the latest count from the database
+  useEffect(() => {
+    async function fetchCount() {
+      const { data, error } = await supabase
+        .from('counts')
+        .select('*')
+        .single()
+
+      if (data && data.value !== undefined) {
+        setCount(data.value)
+      } else if (error) {
+        console.error(error)
+      }
+    }
+
+    fetchCount()
+  }, [])
+
+  // Update the count in the database
+  async function updateCount(newValue) {
+    setCount(newValue)
+    const { error } = await supabase
+      .from('counts')
+      .update({ value: newValue })
+      .eq('id', 1)
+
+    if (error) {
+      console.error(error)
+    }
+  }
+
   return (
     <>
+      <h1>Supabase Counter</h1>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+        <button onClick={() => updateCount(count - 1)}>
+          -
         </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+        <span style={{ margin: "0 1rem" }}>
+          {count}
+        </span>
+        <button onClick={() => updateCount(count + 1)}>
+          +
+        </button>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
